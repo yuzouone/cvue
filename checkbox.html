@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
+    <link rel="stylesheet" href="css/checkbox.css">
+    <title>公司信息</title>
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resource.js"></script>
+</head>
+<body>
+<div class="main" id="app">
+    <div class="header">
+        <p>{{name}}</p>
+        <img src="images/back@2x.png" alt="" ontouchend="back()">
+    </div>
+    <div class="nav"></div>
+    <div class="size">
+        <div class="size_left">
+            <span>货柜尺寸</span><span>(约可容纳30-50件商品)</span>
+        </div>
+        <p>52x10x25cm</p>
+    </div>
+    <div class="gray"></div>
+    <div class="change">
+        <p class="location">请选择租借货柜的位置</p>
+        <div class="tree">
+            <div class="graychange">
+                <div class="graybox"></div>
+                <p>不可选择</p>
+            </div>
+            <div class="yellowchange">
+                <div class="yellowbox"></div>
+                <p>我已租借</p>
+            </div>
+            <div class="bluechange">
+                <div class="bluebox"></div>
+                <p>我已租借</p>
+            </div>
+        </div>
+    </div>
+    <div class="gray"></div>
+    <div class="content">
+        <div class="content_top">
+            <div class="top" v-for="item in tarr"><p>{{item}}</p></div>
+        </div>
+        <div class="content_bottom">
+            <div class="left">
+                <div class="left_arr" v-for="item in larr"><p>{{item}}</p></div>
+            </div>
+            <div class="shu" v-for="item in arr">
+                <div class="heng" v-for="index in item"></div>
+            </div>
+        </div>
+    </div>
+    <div class="gray"></div>
+    <div class="success">
+        <p>您已选择货柜</p>
+        <p>{{checkbox}}</p>
+    </div>
+    <div class="gray"></div>
+    <div class="match">
+        <div class="match_left">
+            <div class="match_left_box">
+                <p>数量/个</p>
+                <p>{{boxnum}}</p>
+            </div>
+            <div class="match_left_box">
+                <p>租期/天</p>
+                <p>365</p>
+            </div>
+            <div class="match_left_box">
+                <p>租金/元</p>
+                <p>1元/天/柜</p>
+            </div>
+        </div>
+        <div class="match_right">
+            <p class="match_right_top">合计：元</p>
+            <div class="match_right_bottom">
+                <p>￥</p>
+                <p>{{cost}}</p>
+            </div>
+        </div>
+    </div>
+    <div class="next">
+        <p>立即签约</p>
+    </div>
+</div>
+</body>
+<script>
+//获取设备屏幕宽度,设置根目录宽度和字体大小
+    function screenwidth(){
+        var html = document.getElementById('html');
+        /*html.style.fontSize = window.screen.width+'px';*/
+        var w=document.documentElement?document.documentElement.clientWidth :document.body.clientWidth ;
+        html.style.fontSize = w/7.5 +'px';
+    }
+    screenwidth();
+    console.log('A'.charCodeAt(0));
+    console.log(String.fromCharCode(65));
+    var itemsarr = [];
+    Vue.http.headers.common['authorization'] = '92b87574-309f-407d-8b22-3198393b0e61';
+    Vue.http.post('http://dev.wetripay.com:8000/eShop/api/shelf/chooseType',{id:'1'},{emulateJSON: true}).then(function(data){
+        console.log('成功');
+        console.log(data);
+        var cells = data.body.data.cells;
+        var heng = Number(data.body.data.shelf.length);
+        var shu = Number(data.body.data.shelf.width);
+        var boxname = data.body.data.shelf.name;
+        //头部格子数组
+        var toparr = [];
+        for(var i=0;i<=shu;i++){
+            if(i==0){
+                toparr.push('');
+            }else{
+                toparr.push(i);
+            }
+
+        }
+        //侧边格子数组
+        var leftarr = [];
+        for(var i=0;i<heng;i++){
+            var a = 65+i;
+            leftarr.push(String.fromCharCode(a));
+        }
+        //格子数组初始化
+        for(var i=0;i<shu;i++){
+            var obj = [];
+            for(var j=0;j<heng;j++){
+                /*if(i==0){
+                    if(j==0){
+                        obj.push('');
+                    }else{
+                        var a = 64+j;
+                        obj.push(String.fromCharCode(a));
+                    }
+                }else if(j==0){
+                    if(i!=0){
+                        var b = i;
+                        obj.push(b);
+                    }
+                }else{*/
+                    obj.push(3);
+                //}
+            }
+            itemsarr.push(obj);
+        }
+        //数组状态化
+        for(var i = 0;i<cells.length;i++){
+            var shu2 = cells[i].obscissa-1;
+            var heng2 = cells[i].ordinate.toUpperCase().charCodeAt(0)-65;
+            var state = cells[i].state;
+            itemsarr[shu2].splice(heng2,1,state);
+        }
+        console.log('数组');
+        console.log(itemsarr);
+
+        //vue实例app
+        var vm = new Vue({
+            el:"#app",
+            data:{
+                name:boxname,
+                arr:itemsarr,
+                tarr:toparr,
+                larr:leftarr,
+                checkbox:'',
+                bluearr:'',
+                boxnum:0,
+            },
+            methods:{
+
+            },
+            computed:{
+                cost:function(){
+                    return this.boxnum*365
+                }
+            }
+        });
+        //格子颜色
+        for(var i = 0;i<cells.length;i++){
+            var shu2 = cells[i].obscissa-1;
+            var heng2 = cells[i].ordinate.toUpperCase().charCodeAt(0)-65;
+            shu2 = Number(shu2);
+            heng2 = Number(heng2);
+            var state = cells[i].state;
+            itemsarr[shu2].splice(heng2,1,state);
+            var colorbox = document.getElementsByClassName('shu')[shu2].children[heng2];
+            if(state == '0'||state == '1'){
+                colorbox.style.background = '#b5b5b5';
+            }
+
+        }
+        //格子添加事件
+        for(var i=0;i<shu;i++){
+            for(var j=0;j<heng;j++){
+                if(itemsarr[i][j]!='0'&&itemsarr[i][j]!='1'){
+                    var whitebox = document.getElementsByClassName('shu')[i].children[j];
+                    attach(i,j,whitebox);
+                }
+
+            }
+        }
+        //选格子函数
+        function attach(i,j,o) {
+            o.onclick = function () {
+                var bluebox = document.getElementsByClassName('shu')[i].children[j];
+                if(bluebox.getAttribute('id')){
+                    bluebox.removeAttribute("id");
+                    var a2 = 65+j;
+                    var b2= 1+i+String.fromCharCode(a2);
+                    var c='';
+
+                    for(var z=0;z<vm.bluearr.length;z++){
+                        if(b2 == vm.bluearr[z]){
+                            vm.bluearr.splice(z, 1);
+                            break;
+                        }
+                    }
+                    console.log(vm.bluearr.length);
+                    vm.boxnum = vm.bluearr.length;
+                    if(vm.bluearr.length == 0){
+                        c='';
+                        vm.checkbox = c;
+                    }else{
+                        for(var z=0;z<vm.bluearr.length;z++){
+                            c+=vm.bluearr[z]+"、";
+                            vm.checkbox = c;
+                        }
+                    }
+                }else{
+                    bluebox.setAttribute("id","bluebox");
+                    var a = 65+j;
+                    var b = 1+i+String.fromCharCode(a)+'、';
+                    vm.checkbox +=b;
+                    vm.bluearr = vm.checkbox.split('、');
+                    vm.bluearr.splice(vm.bluearr.length-1,1);
+                    vm.boxnum = vm.bluearr.length;
+                }
+            }
+        }
+
+
+    })
+</script>
+</html>

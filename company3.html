@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
+    <link rel="stylesheet" href="css/company3.css">
+    <link rel="stylesheet" href="css/animate.min.css">
+    <title>公司信息</title>
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resource.js"></script>
+</head>
+<body>
+<div class="header">
+    <p>开店</p>
+    <img src="images/back@2x.png" alt="" ontouchend="back()">
+</div>
+<div class="top">
+    <p>请上传营业执照</p>
+    <div class="lastp">
+        <p>拍复印件需加盖章，可用有效证件代替</p>
+    </div>
+</div>
+<div class="content">
+    <div class="face" id="app">
+        <img src="images/card_camera_normal_14@2x.png" alt="" class="camara">
+        <p>营业执照</p>
+        <input type="file"  v-on:change="getphoto" accept="image/*"  >
+        <img src="" alt="" id="img" class="card1">
+    </div>
+</div>
+<div class="bottom" id="app2">
+    <div class="b1">
+        <p>执照名称</p>
+        <input type="text" placeholder="输入执照名称" v-model="zname">
+    </div>
+    <div class="b1">
+        <p>法人代表姓名</p>
+        <input type="text" placeholder="输入法人代表姓名" v-model="fname">
+    </div>
+    <div class="b1">
+        <p>执照注册号</p>
+        <input type="text" placeholder="输入执照注册号" v-model="zid">
+    </div>
+    <div class="b1">
+        <p>经营场所</p>
+        <input type="text" placeholder="输入执照所在地" v-model="zlocation">
+    </div>
+    <div class="b2">
+        <p>执照有效期</p>
+        <div class="b2_right" id="example-4" >
+            <input type="radio" id="one" class="one" name="activity" value="longtime" v-model="picked1">
+            <label for="one" class="one_label">长期有效</label>
+            <input type="radio" id="two" class="two" name="activity" value="shorttime"  v-model="picked1">
+            <label for="two" class="two_label">固定有效期</label>
+        </div>
+    </div>
+    <div class="b1">
+        <p>有效期</p>
+        <input type="text" placeholder="请输入日期" v-model="date">
+    </div>
+    <transition name="custorm" enter-active-class="animated tada" leave-active-class="animated bounceOutRight">
+        <div class="ifhid" v-if="ifhid">
+            <p>请填入完整的信息</p>
+        </div>
+    </transition>
+
+</div>
+<p class="next" id="app3" v-on:touchend="next">提交</p>
+<script>
+//获取设备屏幕宽度,设置根目录宽度和字体大小
+    function screenwidth(){
+        var html = document.getElementById('html');
+        /*html.style.fontSize = window.screen.width+'px';*/
+        var w=document.documentElement?document.documentElement.clientWidth :document.body.clientWidth ;
+        html.style.fontSize = w/7.5 +'px';
+    }
+    screenwidth();
+//vue实例app
+    var vm = new Vue({
+        el:"#app",
+        data:{
+            photo1:''
+
+        },
+        methods:{
+            getphoto:function(event){
+                console.log(event);
+                var file = event.target.files[0];
+                var s = new FileReader();
+                console.log("reader对象");
+                console.log(s);
+                s.onloadend = function(e){
+                    console.log('读取结果');
+                    console.log(e);
+                    console.log(e.target.result);
+                    vm.photo1 = e.target.result;
+                    var img = document.getElementById('img');
+                    img.src = vm.photo1;
+                    /*//上传
+                    vm.$http.post('http://dev.wetripay.com:8000/eShop/api/upload',{'phone':'13602402344','type':'idCardOne','file':e.target.result},{emulateJSON: true})
+                        .then(function(respond){
+                            console.log('上传成功');
+                            console.log(respond);
+                        })*/
+
+                }
+                s.readAsDataURL(file);
+            },
+        }
+    });
+//vue实例app2
+    var vm2 = new Vue({
+        el:"#app2",
+        data:{
+            zname:"",
+            fname:"",
+            zid:'',
+            zlocation:"",
+            picked1:"",
+            /*picked2:"",*/
+            date:'',
+            ifhid:false
+
+        },
+    });
+//vue实例app3
+    var vm3 = new Vue({
+        el:"#app3",
+        methods:{
+            next:function(){
+                if(vm.photo1!=""&&vm2.zname!=""&&vm2.fname!=""&&vm2.zid!=""&&vm2.zlocation!=""&&vm2.picked1!=""&&vm2.date!=""){
+                    console.log('成功');
+                    vm2.ifhid = false;
+
+                }else{
+                    console.log('失败');
+                    console.log(vm2.picked1);
+                    console.log(vm2.date);
+                    vm2.ifhid = true;
+
+                }
+            }
+
+        }
+    });
+//返回上一级
+function back(){
+    window.history.back(-1);
+}
+</script>
+</body>
+</html>

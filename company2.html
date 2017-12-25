@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
+    <title>证件照信息</title>
+    <link rel="stylesheet" href="css/company2.css">
+    <link rel="stylesheet" href="css/animate.min.css">
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resource.js"></script>
+</head>
+<body>
+<div class="header">
+    <p>开店</p>
+    <img src="images/back@2x.png" alt="" ontouchend="back()">
+</div>
+<div class="top">
+    <p>请上传法人手持证件照信息</p>
+    <div class="lastp">
+        <p>需清晰展示五官和文字信息不可自拍，不可只拍身份证</p>
+    </div>
+</div>
+<div class="content" id="app">
+    <div class="face" >
+        <img src="images/card_camera_normal_14@2x.png" alt="" class="camara">
+        <p>法人手持身份证正面照</p>
+        <input type="file"  v-on:change="getphoto" accept="image/*"  >
+        <img src="" alt="" class="card1" id="img">
+    </div>
+    <div class="opsize">
+        <img src="images/card_camera_normal_14@2x.png" alt="" class="camara2">
+        <p>法人手持身份证反面照</p>
+        <input type="file"  v-on:change="getphoto2" accept="image/*"  >
+        <img src="" alt="" class="card2" id="img2">
+    </div>
+    <input type="text" placeholder="输入您的姓名" class="firstinput" v-model="name">
+    <input type="number" placeholder="输入身份证号码" class="secondinput" v-model="personcard">
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="ifhid" v-if="ifhid">
+            <p>请填入完整的信息</p>
+        </div>
+    </transition>
+
+    <p class="next" v-on:touchend="next">下一步</p>
+</div>
+<script>
+//获取设备屏幕宽度,设置根目录宽度和字体大小
+    function screenwidth(){
+        var html = document.getElementById('html');
+        /*html.style.fontSize = window.screen.width+'px';*/
+        var w=document.documentElement?document.documentElement.clientWidth :document.body.clientWidth ;
+        html.style.fontSize = w/7.5 +'px';
+    }
+    screenwidth();
+//vue实例
+var vm = new Vue({
+  el: '#app',
+  data: {
+    message:'',
+    photo1:'',
+    photo2:'',
+    photo3:'',
+    name:'',
+    personcard:'',
+    ifhid:false
+  },
+  http:{
+    headers:{
+
+    }
+  },
+  methods:{
+    getphoto:function(event){
+        console.log(event);
+        var file = event.target.files[0];
+        var s = new FileReader();
+        console.log("reader对象");
+        console.log(s);
+        s.onloadend = function(e){
+            console.log('读取结果');
+            console.log(e);
+            console.log(e.target.result);
+            vm.photo1 = e.target.result;
+            var img = document.getElementById('img');
+            img.src = vm.photo1;
+            /*//上传
+            vm.$http.post('http://dev.wetripay.com:8000/eShop/api/upload',{'phone':'13602402344','type':'idCardOne','file':e.target.result},{emulateJSON: true})
+                .then(function(respond){
+                    console.log('上传成功');
+                    console.log(respond);
+                })*/
+
+        }
+        s.readAsDataURL(file);
+        //s.readAsArrayBuffer(file);readAsArrayBuffer
+
+    },
+    getphoto2:function(event){
+        var file = event.target.files[0];
+        var s = new FileReader();
+        s.onloadend = function(e){
+            var img = document.getElementById('img2');
+            vm.photo2 = e.target.result;
+            img.src = vm.photo2;
+            console.log('读取结果');
+            console.log(vm.photo2);
+            /*//上传
+            vm.$http.post('http://dev.wetripay.com:8000/eShop/api/upload',{'phone':'13602402344','type':'idCardOne','file':e.target.result},{emulateJSON: true})
+                .then(function(respond){
+                    console.log('上传成功');
+                    console.log(respond);
+                })*/
+
+        }
+        s.readAsDataURL(file);
+        //s.readAsArrayBuffer(file);readAsArrayBuffer
+
+    },
+    next:function(){
+        console.log(1);
+        console.log(this.photo1);
+        console.log(this.photo2);
+        console.log(this.name);
+        console.log(this.personcard);
+        console.log(this.photo1!=''&&this.photo2!=''&&this.name!=''&&this.personcard!='');
+        if(this.photo1!=''&&this.photo2!=''&&this.name!=''&&this.personcard!=''){
+            this.ifhid = false;
+            //上传
+            vm.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id":'8135','idCardOne':this.photo1,"idCardSecond":this.photo2,"idCardNumber": this.personcard,"name": this.name},{emulateJSON: true})
+                .then(function(respond){
+                    console.log('上传成功');
+                    console.log(respond);
+                })
+
+        }else{
+            this.ifhid = true;
+        }
+    }
+
+
+  }
+});
+//返回上一级
+function back(){
+    window.history.back(-1);
+}
+
+
+</script>
+</body>
+</html>

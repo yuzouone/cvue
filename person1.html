@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
+    <link rel="stylesheet" href="css/person1.css">
+    <title>个人信息</title>
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resource.js"></script>
+    <script src="js/jquery-3.1.1.js"></script>
+</head>
+<body>
+<div class="header">
+    <p>开店</p>
+    <img src="images/back@2x.png" alt="">
+</div>
+<div class="center">
+    <p>经营品类</p>
+    <p>请选择您要经营商品的品类（可多选）</p>
+</div>
+<div class="content" id="app2">
+    <p id="fna" v-on:touchend='fna'>坚果炒货</p>
+    <p id="fnb" v-on:touchend='fnb'>烟酒类</p>
+    <p id="fnc" v-on:touchend='fnc'>肉类/豆干制品零食</p>
+    <p id="fnd" v-on:touchend='fnd'>蜜饯果干</p>
+    <p id="fne" v-on:touchend='fne'>冲调保健</p>
+    <p id="fnf" v-on:touchend='fnf'>糖果/巧克力</p>
+    <p id="fng" v-on:touchend='fng'>牛奶乳品</p>
+    <p id="fnh" v-on:touchend='fnh'>饼干糕点膨化</p>
+    <p id="fni" v-on:touchend='fni'>饮料/水</p>
+</div>
+<div class="change" id="app4">
+    <p v-if="change">请选择商品种类</p>
+</div>
+
+<p v-on:click="next()" class="next" id="app3">下一步</p>
+<script>
+    //获取设备屏幕宽度,设置根目录宽度和字体大小
+    function screenwidth(){
+        var html = document.getElementById('html');
+        html.style.fontSize = window.screen.width+'px';
+        var w=document.documentElement?document.documentElement.clientWidth :document.body.clientWidth ;
+        html.style.fontSize = w/7.5 +'px';
+    }
+    screenwidth();
+    //vue app2实例
+    var sa = '',sb = '',sc= '',sd= '',se= '',sf= '',sg= '',sh= '',si = '';
+    var vm2 = new Vue({
+        el:'#app2',
+        data:{
+            a:'1',
+            b:'2',
+            c:'3',
+            d:'4',
+            e:'5',
+            f:'6',
+            g:'7',
+            h:'8',
+            i:'9',
+            isactive:false,
+        },
+        methods:{
+            fna:function(){
+                console.log(this.a);
+                sa = this.a;
+                var fna = document.getElementById('fna');
+                if(this.a == ''){
+                    this.a = '1';
+                    fna.className = fna.className.replace('addcolor','');
+                }else{
+                    this.a = '';
+                    fna.className = 'addcolor';
+                }
+
+            },
+            fnb:function(){
+                console.log(this.b);
+                sb = this.b;
+                var fnb = document.getElementById('fnb');
+                if(this.b == ''){
+                    this.b = '2';
+                    fnb.className = fnb.className.replace('addcolor','');
+                }else{
+                    this.b = '';
+                    fnb.className = 'addcolor';
+                }
+
+            },
+            fnc:function(){
+                console.log(this.c);
+                sc = this.c;
+                var fnac = document.getElementById('fnc');
+                if(this.c == ''){
+                    this.c = '3';
+                    fnc.className = fnc.className.replace('addcolor','');
+                }else{
+                    this.c = '';
+                    fnc.className = 'addcolor';
+                }
+
+            },
+            fnd:function(){
+                console.log(this.d);
+                sd = this.d;
+                var fnd = document.getElementById('fnd');
+                if(this.d == ''){
+                    this.d = '4';
+                    fnd.className = fnd.className.replace('addcolor','');
+                }else{
+                    this.d = '';
+                    fnd.className = 'addcolor';
+                }
+
+            },
+            fne:function(){
+                console.log(this.e);
+                se = this.e;
+                var fne = document.getElementById('fne');
+                if(this.e == ''){
+                    this.e = '5';
+                    fne.className = fne.className.replace('addcolor','');
+                }else{
+                    this.e = '';
+                    fne.className = 'addcolor';
+                }
+
+            },
+            fnf:function(){
+                console.log(this.f);
+                sf = this.f;
+                var fnf = document.getElementById('fnf');
+                if(this.f == ''){
+                    this.f = '6';
+                    fnf.className = fnf.className.replace('addcolor','');
+                }else{
+                    this.f = '';
+                    fnf.className = 'addcolor';
+                }
+
+            },
+            fng:function(){
+                console.log(this.g);
+                sg = this.g;
+                var fng = document.getElementById('fng');
+                if(this.g == ''){
+                    this.g = '7';
+                    fng.className = fng.className.replace('addcolor','');
+                }else{
+                    this.g = '';
+                    fng.className = 'addcolor';
+                }
+
+            },
+            fnh:function(){
+                console.log(this.h);
+                sh = this.h;
+                var fnh = document.getElementById('fnh');
+                if(this.h == ''){
+                    this.h = '8';
+                    fnh.className = fnh.className.replace('addcolor','');
+                }else{
+                    this.h = '';
+                    fnh.className = 'addcolor';
+                }
+
+            },
+            fni:function(){
+                console.log(this.i);
+                si = this.i;
+                var fni = document.getElementById('fni');
+                if(this.i == ''){
+                    this.i = '9';
+                    fni.className = fni.className.replace('addcolor','');
+                }else{
+                    this.i = '';
+                    fni.className = 'addcolor';
+                }
+
+            },
+
+
+        }
+    });
+//vue实例app3
+var vm3 = new Vue({
+        el:'#app3',
+        data:{
+
+        },
+        methods:{
+            next:function(){
+                //判断信息完整
+                if(sa!=''||sb!=''||sc!=''||sd!=''||se!=''||sf!=''||sg!=''||sh!=''||si!=''){
+                        //可以进行请求
+                        vm4.change = false;
+                        var boxarr = [sa,sb,sc,sd,se,sf,sg,sh,si];
+                        var sum = "";
+                        for(var i=0;i<boxarr.length;i++){
+                            if(boxarr[i]!=''){
+                                sum += boxarr[i];
+                                sum +='&';
+                            }
+
+                        }
+                        sum = sum.substring(0,sum.length-1);
+                        console.log(sum);
+                       // window.location.href="company2.html"
+                       //上传
+                       //Vue.http.options.emulateJSON = true;
+                       vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id": 8135,"sellerType":sum}, {emulateJSON: true})
+                        .then(function(res){
+                            console.log('请求结果');
+                            console.log(res);
+                       });
+                }else{
+                    vm4.change = true;
+
+                }
+
+               //上传
+               /*vm3.http(
+                    method:'POST',
+                    url:'http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',
+                    data:{"id": 8135,"company": vm.input,"sellerType":sum,},
+                    emulateJSON:true,
+                    ).then(function(data){
+                        console.log('请求结果');
+                        console.log(data);
+                    })*/
+            }
+        }
+    });
+//vue实例app4
+    var vm4 = new Vue({
+        el:'#app4',
+        data:{
+            change:false
+        }
+
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
+    <title>证件照信息</title>
+    <link rel="stylesheet" href="css/person3.css">
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resource.js"></script>
+</head>
+<body>
+<div class="header">
+    <p>开店</p>
+    <img src="images/back@2x.png" alt="" ontouchend="back()">
+</div>
+<div class="top">
+    <p>请上传法人手持证件照信息</p>
+    <div class="lastp">
+        <p>需清晰展示五官和文字信息，不可自拍，不可只拍身份证</p>
+    </div>
+</div>
+<div class="content">
+    <div class="face" id="app">
+        <img src="images/card_camera_normal_14@2x.png" alt="" class="camara">
+        <p>法人手持身份证正面照</p>
+        <span>调用摄像机</span>
+        <input type="file"  v-on:change="getphoto" accept="image/*"  >
+        <img src="" alt="" width="70" height="80" id="img">
+    </div>
+    <div class="opsize">
+        <img src="images/card_camera_normal_14@2x.png" alt="" class="camara2">
+        <p>法人手持身份证反面照</p>
+    </div>
+    <p class="next">提交</p>
+</div>
+<script>
+//获取设备屏幕宽度,设置根目录宽度和字体大小
+    function screenwidth(){
+        var html = document.getElementById('html');
+        /*html.style.fontSize = window.screen.width+'px';*/
+        var w=document.documentElement?document.documentElement.clientWidth :document.body.clientWidth ;
+        html.style.fontSize = w/7.5 +'px';
+    }
+    screenwidth();
+</script>
+</body>
+</html>

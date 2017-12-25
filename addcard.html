@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en" id="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
+    <title>添加银行卡</title>
+    <link rel="stylesheet" href="css/addcard.css">
+    <link rel="stylesheet" href="css/animate.min.css">
+    <script src="js/vue.js"></script>
+    <script src="js/vue-resource.js"></script>
+</head>
+<body>
+<div class="header">
+    <p>添加银行卡</p>
+    <img src="images/back@2x.png" alt="" ontouchend="back()">
+</div>
+<div class="content" id="app">
+    <div class="b1">
+        <div class="b1_left">
+            <p>持卡人</p>
+        </div>
+        <input type="text" placeholder="持卡人姓名" v-model="name">
+    </div>
+    <div class="b1">
+        <div class="b1_left">
+            <p>卡号</p>
+        </div>
+        <input type="number" placeholder="请输入银行卡卡号" v-model="cardid">
+    </div>
+    <div class="b1">
+        <div class="b1_left">
+            <p>银行卡归属</p>
+        </div>
+        <input type="text" placeholder="如工商银行" v-model="cardtype">
+    </div>
+    <div class="b1">
+        <div class="b1_left">
+            <p>预留手机号</p>
+        </div>
+        <input type="text" placeholder="请输入银行卡预留手机号" v-model="phone">
+    </div>
+    <transition name="custom-classes-transition" enter-active-class="animated rollIn" leave-active-class="animated bounceOutRight">
+        <div class="ifshow" v-if="ifshow">
+            <p>请填写所有内容</p>
+        </div>
+    </transition>
+    <p class="next" v-on:touchend="next">下一步</p>
+</div>
+<div class="motai" id="app2" v-if="ifshow">
+    <div class="motai_content">
+        <p class="p1">提示</p>
+        <p class="p2">请添加您要提现的银行卡</p>
+        <div class="close">
+            <p v-on:touchend="close">我知道了</p>
+        </div>
+    </div>
+</div>
+<script>
+//获取设备屏幕宽度,设置根目录宽度和字体大小
+    function screenwidth(){
+        var html = document.getElementById('html');
+        /*html.style.fontSize = window.screen.width+'px';*/
+        var w=document.documentElement?document.documentElement.clientWidth :document.body.clientWidth ;
+        html.style.fontSize = w/7.5 +'px';
+    }
+    screenwidth();
+//vue实例app1
+var vm = new Vue({
+    el:"#app",
+    data:{
+        name:'',
+        cardid:'',
+        cardtype:'',
+        phone:'',
+        ifshow:false
+
+    },
+    methods:{
+        next:function(){
+            if(this.name!=""&&this.cardid!=""&&this.cardtype!=""&&this.phone!=""){
+                this.ifshow = false;
+            }else{
+                this.ifshow = true;
+            }
+        },
+        //形变效果
+        animatechange:function(){
+            var p = document.getElementsByName('next');
+            var p = p[0];
+        }
+    }
+});
+//vue实例app2
+var vm2 = new Vue({
+    el:'#app2',
+    data:{
+        ifshow:true,
+    },
+    methods:{
+        close:function(){
+            vm2.ifshow = false;
+        },
+    }
+});
+
+
+</script>
+</body>
+</html>
