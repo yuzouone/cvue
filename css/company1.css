@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-12-02 14:31:05
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-12-15 17:42:10
+* @Last Modified time: 2017-12-25 16:24:54
 */
 *{
     padding: 0;border: 0;margin: 0;
@@ -86,6 +86,9 @@ html,body{
 .change{
     width:90%;
     font-size:0.3rem;
+}
+#app4{
+    width:90%;
 }
 .ifhid{
     width:90%;

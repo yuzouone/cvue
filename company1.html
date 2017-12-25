@@ -4,10 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
     <link rel="stylesheet" href="css/company1.css">
+    <link rel="stylesheet" href="css/animate.min.css">
     <title>公司信息</title>
     <script src="js/vue.js"></script>
     <script src="js/vue-resource.js"></script>
-    <script src="js/jquery-3.1.1.js"></script>
 </head>
 <body>
 <div class="header">
@@ -33,9 +33,19 @@
     <p id="fnh" v-on:touchend='fnh'>饼干糕点膨化</p>
     <p id="fni" v-on:touchend='fni'>饮料/水</p>
 </div>
-<div class="ifhid"  id="app4">
-    <p v-if="ifhid">请填写所有的信息</p>
+<div id="app4">
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="ifhid" v-if="ifhid">
+            <p >请填写所有的信息</p>
+        </div>
+    </transition>
 </div>
+
+<!-- <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="ifhid" v-if="ifhid">
+            <p>请填入完整的信息</p>
+        </div>
+</transition> -->
 <!-- <div class="change" >
     <p v-if="change">请选择商品种类</p>
 </div> -->
@@ -53,6 +63,18 @@
         html.style.fontSize = w/7.5 +'px';
     }
     screenwidth();
+//获取登录信息
+    function token(){
+        var arr = [];
+        var r = window.location.search.substr(1).split('&');
+        var first = r[0].split('=')[1];
+        var second = r[1].split('=')[1];
+        arr.push(first);
+        arr.push(second);
+        return arr;
+    }
+    console.log('token');
+    console.log(token());
 //vue实例
     var vm = new Vue({
         el:'#app',
@@ -241,7 +263,10 @@ var vm3 = new Vue({
                        //上传
                        console.log(vm.input);
                        //Vue.http.options.emulateJSON = true;
-                       vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id": 8135,"company": vm.input,"sellerType":sum}, {emulateJSON: true})
+                       var tokenid = token();
+                       Vue.http.headers.common['authorization'] = tokenid[0];
+                       var rid = tokenid[1];
+                       vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id": rid,"company": vm.input,"sellerType":sum}, {emulateJSON: true})
                         .then(function(res){
                             console.log('请求结果');
                             console.log(res);
