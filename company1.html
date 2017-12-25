@@ -266,6 +266,8 @@ var vm3 = new Vue({
                        //上传
                        console.log(vm.input);
                        //Vue.http.options.emulateJSON = true;
+                        console.log('token2');
+                        console.log(token());
 
                        vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id":id ,"company": vm.input,"sellerType":sum}, {emulateJSON: true})
                         .then(function(res){
