@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-12-11 17:06:22
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-12-11 17:23:19
+* @Last Modified time: 2017-12-26 15:34:17
 */
 *{
     padding: 0;border: 0;margin: 0;
@@ -80,6 +80,8 @@ html,body{
 
 }
 /* 点击颜色 */
+/* 点击颜色 */
 .addcolor{
-    background:pink !important;
+    background:#444444 !important;
+    color:white;
 }

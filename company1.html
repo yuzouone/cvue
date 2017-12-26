@@ -268,17 +268,17 @@ var vm3 = new Vue({
                         console.log('token2');
                         console.log(token());
 
-                       vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id":id ,"company": vm.input,"sellerType":sum}, {emulateJSON: true})
+                       /*vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id":id ,"company": vm.input,"sellerType":sum}, {emulateJSON: true})
                         .then(function(res){
                             console.log('请求结果');
                             console.log(res);
                             if(res.body&&res.body.code&&res.body.code == '200'){
-                                /*window.location.href = 'https://yuzouone.github.io/cvue/company2.html?'+"token="+tokenid[0]+"&"+"id="+tokenid[1];*/
+                                window.location.href = 'https://yuzouone.github.io/cvue/company2.html?'+"token="+tokenid[0]+"&"+"id="+tokenid[1];
                             }
 
-                       });
+                       });*/
                        //测试跳转
-                       /*window.location.href = 'https://yuzouone.github.io/cvue/company2.html';*/
+                       window.location.href = 'bluebox='+'4B、5C';
 
                     }else{
                         vm4.ifhid = true;

@@ -14,7 +14,9 @@
         <p>{{name}}</p>
         <img src="images/back@2x.png" alt="" ontouchend="back()">
     </div>
-    <div class="nav"></div>
+    <div class="nav">
+        <img src="images/banner@2x.png" alt="">
+    </div>
     <div class="size">
         <div class="size_left">
             <span>货柜尺寸</span><span>(约可容纳30-50件商品)</span>
@@ -111,8 +113,6 @@
     var tokenid = token();
     Vue.http.headers.common['authorization'] = tokenid[0];
     var id2 = tokenid[1];
-    console.log('A'.charCodeAt(0));
-    console.log(String.fromCharCode(65));
     var itemsarr = [];
     /*Vue.http.headers.common['authorization'] = '92b87574-309f-407d-8b22-3198393b0e61';*/
     Vue.http.post('http://dev.wetripay.com:8000/eShop/api/shelf/chooseType',{id:id2},{emulateJSON: true}).then(function(data){
@@ -142,21 +142,7 @@
         for(var i=0;i<shu;i++){
             var obj = [];
             for(var j=0;j<heng;j++){
-                /*if(i==0){
-                    if(j==0){
-                        obj.push('');
-                    }else{
-                        var a = 64+j;
-                        obj.push(String.fromCharCode(a));
-                    }
-                }else if(j==0){
-                    if(i!=0){
-                        var b = i;
-                        obj.push(b);
-                    }
-                }else{*/
-                    obj.push(3);
-                //}
+                obj.push(3);
             }
             itemsarr.push(obj);
         }
@@ -181,15 +167,27 @@
                 checkbox:'',
                 bluearr:'',
                 boxnum:0,
+                price:0,
             },
             methods:{
                 next:function(){
-                    window.location.href = 'https://yuzouone.github.io/cvue/company1.html';
+                    console.log(vm.bluearr);
+                    var bluebox = '';
+                    for(var i=0;i<vm.bluearr.length;i++){
+                        if(i == vm.bluearr.length-1){
+                            bluebox += vm.bluearr[i]
+                        }else{
+                            bluebox += vm.bluearr[i]+'、'
+                        }
+                    }
+                    console.log(bluebox);
+                    window.location.href = 'bluebox='+bluebox;
                 }
             },
             computed:{
                 cost:function(){
-                    return this.boxnum*365
+                    /*vm.price = this.boxnum*365;*/
+                    return this.boxnum*365;
                 }
             }
         });
