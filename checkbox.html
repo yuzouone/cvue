@@ -82,7 +82,7 @@
             </div>
         </div>
     </div>
-    <div class="next">
+    <div class="next" v-on:touchend="next">
         <p>立即签约</p>
     </div>
 </div>
@@ -96,11 +96,26 @@
         html.style.fontSize = w/7.5 +'px';
     }
     screenwidth();
+//获取登录信息
+    function token(){
+        var arr = [];
+        var r = window.location.search.substr(1).split('&');
+        var first = r[0].split('=')[1];
+        var second = r[1].split('=')[1];
+        arr.push(first);
+        arr.push(second);
+        return arr;
+    }
+    console.log('token');
+    console.log(token());
+    var tokenid = token();
+    Vue.http.headers.common['authorization'] = tokenid[0];
+    var id2 = tokenid[1];
     console.log('A'.charCodeAt(0));
     console.log(String.fromCharCode(65));
     var itemsarr = [];
-    Vue.http.headers.common['authorization'] = '92b87574-309f-407d-8b22-3198393b0e61';
-    Vue.http.post('http://dev.wetripay.com:8000/eShop/api/shelf/chooseType',{id:'1'},{emulateJSON: true}).then(function(data){
+    /*Vue.http.headers.common['authorization'] = '92b87574-309f-407d-8b22-3198393b0e61';*/
+    Vue.http.post('http://dev.wetripay.com:8000/eShop/api/shelf/chooseType',{id:id2},{emulateJSON: true}).then(function(data){
         console.log('成功');
         console.log(data);
         var cells = data.body.data.cells;
@@ -168,7 +183,9 @@
                 boxnum:0,
             },
             methods:{
-
+                next:function(){
+                    window.location.href = 'https://yuzouone.github.io/cvue/company1.html';
+                }
             },
             computed:{
                 cost:function(){
