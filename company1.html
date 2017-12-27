@@ -50,11 +50,20 @@
     <p v-if="change">请选择商品种类</p>
 </div> -->
 
-<p v-on:click="next()" class="next" id="app3">下一步</p>
+<p  class="next" id="app3" ontouchend="onClickButton()">下一步</p>
 <!-- <input type="file" onchange="showPreview(this)" filetype="image/*"/>
 <img id="portrait" src="" width="70" height="75"> -->
 </body>
 <script>
+//测试
+function onClickButton() {
+    // 复杂数据
+    var list = [1,2,3];
+    var dict = {"name":"阳君", "qq":"937447974", "list":list};
+
+    // JS通知WKWebView
+    window.webkit.messageHandlers.share.postMessage(dict);
+}
 //获取设备屏幕宽度,设置根目录宽度和字体大小
     function screenwidth(){
         var html = document.getElementById('html');
