@@ -72,6 +72,9 @@
                         .then(function(respond){
                             console.log('上传成功');
                             console.log(respond);
+                            if(res.body&&res.body.code&&res.body.code == '200'){
+                                window.location.href = 'https://yuzouone.github.io/cvue/person3.html?'+"token="+tokenid[0]+"&"+"id="+tokenid[1];
+                            }
                         })
                 }else{
                     vm.ifhid = true;

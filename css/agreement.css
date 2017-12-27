@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-12-27 10:11:58
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-12-27 10:37:10
+* @Last Modified time: 2017-12-27 15:32:02
 */
 *{
     margin: 0;padding: 0;border: 0;
@@ -39,7 +39,6 @@ html,body{
     height:0.96rem;
     border-top: 1px solid #999999;
     margin-top: 0.1rem;
-    background: pink;
     display:-webkit-flex;
     display: flex;
     flex-direction:row;
@@ -50,4 +49,10 @@ html,body{
 .footer input{
     width:0.3rem;
     height:0.3rem;
+
+
+}
+.footer p{
+    margin-left: 0.22rem;
+
 }

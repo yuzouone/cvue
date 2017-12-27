@@ -55,10 +55,7 @@
 <img id="portrait" src="" width="70" height="75"> -->
 </body>
 <script>
-//测试
-function back(){
-    window.location.href = 'https://yuzouone.github.io/cvue/company2.html';
-}
+
 //获取设备屏幕宽度,设置根目录宽度和字体大小
     function screenwidth(){
         var html = document.getElementById('html');
@@ -81,7 +78,7 @@ function back(){
     console.log(token());
     var tokenid = token();
     Vue.http.headers.common['authorization'] = tokenid[0];
-    var id = tokenid[1];
+    var id2 = tokenid[1];
 //vue实例
     var vm = new Vue({
         el:'#app',
@@ -265,14 +262,15 @@ var vm3 = new Vue({
 
                         }
                         sum = sum.substring(0,sum.length-1);
+                        console.log('选择的数字');
                         console.log(sum);
                        //上传
-                       console.log(vm.input);
+                        console.log(vm.input);
                        //Vue.http.options.emulateJSON = true;
                         console.log('token2');
                         console.log(token());
 
-                       /*vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id":id ,"company": vm.input,"sellerType":sum}, {emulateJSON: true})
+                       vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{'id':id2,"company": vm.input,'sellerType':sum}, {emulateJSON: true})
                         .then(function(res){
                             console.log('请求结果');
                             console.log(res);
@@ -280,11 +278,24 @@ var vm3 = new Vue({
                                 window.location.href = 'https://yuzouone.github.io/cvue/company2.html?'+"token="+tokenid[0]+"&"+"id="+tokenid[1];
                             }
 
-                       });*/
+                       });
                        //测试跳转
                        /*var s = '7F';*/
-                       window.location.href = 'https://yuzouone.github.io/cvue/company2.html';
-                       /*window.webkit.messageHandlers.Share.postMessage({'a':'6F'});*/
+
+                       /*window.webkit.messageHandlers.share.postMessage({'a':'6F'});*/
+
+                       //判断用户移动端使用的系统平台
+                        /*var u = navigator.userAgent;
+                        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+                            //安卓手机
+                            console.log('安卓手机');
+                            window.location.href = 'https://yuzouone.github.io/cvue/company2.html';
+                        } else if (u.indexOf('iPhone') > -1) {
+                            //苹果手机
+                            console.log('苹果手机');
+                        } else if (u.indexOf('Windows Phone') > -1) {
+                            //winphone手机
+                        }*/
 
                     }else{
                         vm4.ifhid = true;

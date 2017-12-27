@@ -40,7 +40,7 @@
 
 <p v-on:click="next()" class="next" id="app3">下一步</p>
 <script>
-    //获取设备屏幕宽度,设置根目录宽度和字体大小
+//获取设备屏幕宽度,设置根目录宽度和字体大小
     function screenwidth(){
         var html = document.getElementById('html');
         html.style.fontSize = window.screen.width+'px';
@@ -48,7 +48,22 @@
         html.style.fontSize = w/7.5 +'px';
     }
     screenwidth();
-    //vue app2实例
+//获取登录信息
+    function token(){
+        var arr = [];
+        var r = window.location.search.substr(1).split('&');
+        var first = r[0].split('=')[1];
+        var second = r[1].split('=')[1];
+        arr.push(first);
+        arr.push(second);
+        return arr;
+    }
+    console.log('token');
+    console.log(token());
+    var tokenid = token();
+    Vue.http.headers.common['authorization'] = tokenid[0];
+    var id2 = tokenid[1];
+//vue app2实例
     var sa = '',sb = '',sc= '',sd= '',se= '',sf= '',sg= '',sh= '',si = '';
     var vm2 = new Vue({
         el:'#app2',
@@ -212,10 +227,13 @@ var vm3 = new Vue({
                        // window.location.href="company2.html"
                        //上传
                        //Vue.http.options.emulateJSON = true;
-                       vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id": 8135,"sellerType":sum}, {emulateJSON: true})
+                       vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id": id2,"sellerType":sum}, {emulateJSON: true})
                         .then(function(res){
                             console.log('请求结果');
                             console.log(res);
+                            if(res.body&&res.body.code&&res.body.code == '200'){
+                                window.location.href = 'https://yuzouone.github.io/cvue/person2.html?'+"token="+tokenid[0]+"&"+"id="+tokenid[1];
+                            }
                        });
                 }else{
                     vm4.change = true;

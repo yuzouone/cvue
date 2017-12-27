@@ -17,8 +17,8 @@
 <div class="content">
 
 </div>
-<div class="footer" id="app">
-    <input type="radio" v-model="change">
+<div class="footer" id="app" >
+    <input type="radio" value="true"  v-on:touchend="next">
     <p>我已同意本签约协议</p>
 </div>
 <script>
@@ -49,13 +49,15 @@
     var vm = new Vue({
         el:'#app',
         data:{
-            change:'',
+
         },
         methods:{
             next:function(){
-
-
+                window.location.href = 'https://yuzouone.github.io/cvue/company2.html'
             }
+
+        },
+        computed:{
 
         }
     });
