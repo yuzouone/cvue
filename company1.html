@@ -278,8 +278,9 @@ var vm3 = new Vue({
 
                        });*/
                        //测试跳转
-                       var s = '7F';
-                       window.location.href = 'https://yuzouone.github.io/cvue/company2.html?bluebox='+s;
+                       /*var s = '7F';
+                       window.location.href = 'https://yuzouone.github.io/cvue/company2.html?bluebox='+s;*/
+                       window.webkit.messageHandlers.Share.postMessage({'a':'6F'});
 
                     }else{
                         vm4.ifhid = true;

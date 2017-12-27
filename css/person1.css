@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-12-11 17:06:22
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-12-26 15:34:17
+* @Last Modified time: 2017-12-26 17:16:49
 */
 *{
     padding: 0;border: 0;margin: 0;
@@ -71,6 +71,12 @@ html,body{
 .change{
     width:90%;
     font-size:0.3rem;
+}
+.ifhid{
+    width:80%;
+    color:red;
+    font-size:0.3rem;
+    margin-top: 0.2rem;
 }
 .next{
     margin-top: 0.86rem;

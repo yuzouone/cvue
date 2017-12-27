@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
-    <link rel="stylesheet" href="css/person2.css">
+    <link rel="stylesheet" href="css/agreement.css">
     <link rel="stylesheet" href="css/animate.min.css">
     <title>公司信息</title>
     <script src="js/vue.js"></script>
@@ -11,26 +11,16 @@
 </head>
 <body>
 <div class="header">
-    <p>开店</p>
+    <p>签约协议</p>
     <img src="images/back@2x.png" alt="" ontouchend="back()">
 </div>
-<div class="top">
-    <p>身份证信息</p>
-    <div class="lastp">
-        <p>请输入您的姓名和身份证号码</p>
-    </div>
-</div>
-<div class="content" id="app">
-    <input type="text" placeholder="输入您的姓名" class="firstinput" v-model="name">
-    <input type="text" placeholder="输入身份证号码" class="secondinput" v-model="personcard">
-    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
-        <div class="ifhid" v-if="ifhid">
-            <p >请填写所有的信息</p>
-        </div>
-    </transition>
-    <p class="next" v-on:touchend ="next">下一步</p>
-</div>
+<div class="content">
 
+</div>
+<div class="footer" id="app">
+    <input type="radio" v-model="change">
+    <p>我已同意本签约协议</p>
+</div>
 <script>
     //获取设备屏幕宽度,设置根目录宽度和字体大小
     function screenwidth(){
@@ -59,23 +49,11 @@
     var vm = new Vue({
         el:'#app',
         data:{
-            ifhid:false,
-            name:'',
-            personcard:''
+            change:'',
         },
         methods:{
             next:function(){
-                if(vm.name!=''&&vm.personcard!=''){
-                    vm.ifhid = false;
-                    //上传
-                    vm.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id":'8135',"idCardNumber": this.personcard,"name": this.name},{emulateJSON: true})
-                        .then(function(respond){
-                            console.log('上传成功');
-                            console.log(respond);
-                        })
-                }else{
-                    vm.ifhid = true;
-                }
+
 
             }
 

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
     <link rel="stylesheet" href="css/person1.css">
+    <link rel="stylesheet" href="css/animate.min.css">
     <title>个人信息</title>
     <script src="js/vue.js"></script>
     <script src="js/vue-resource.js"></script>
@@ -30,7 +31,11 @@
     <p id="fni" v-on:touchend='fni'>饮料/水</p>
 </div>
 <div class="change" id="app4">
-    <p v-if="change">请选择商品种类</p>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="ifhid" v-if="change">
+            <p >请选择商品种类</p>
+        </div>
+    </transition>
 </div>
 
 <p v-on:click="next()" class="next" id="app3">下一步</p>
