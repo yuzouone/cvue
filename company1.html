@@ -5,14 +5,14 @@
     <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
     <link rel="stylesheet" href="css/company1.css">
     <link rel="stylesheet" href="css/animate.min.css">
-    <title>公司信息</title>
+    <title>开店</title>
     <script src="js/vue.js"></script>
     <script src="js/vue-resource.js"></script>
 </head>
 <body>
 <div class="header">
-    <p>开店</p>
-    <img src="images/back@2x.png" alt="">
+    <p></p>
+    <img src="images/back@2x.png" alt="" ontouchend="back()">
 </div>
 <div class="top" id="app">
     <p>公司名称</p>
@@ -50,19 +50,14 @@
     <p v-if="change">请选择商品种类</p>
 </div> -->
 
-<p  class="next" id="app3" ontouchend="onClickButton()">下一步</p>
+<p  class="next" id="app3" v-on:touchend="next">下一步</p>
 <!-- <input type="file" onchange="showPreview(this)" filetype="image/*"/>
 <img id="portrait" src="" width="70" height="75"> -->
 </body>
 <script>
 //测试
-function onClickButton() {
-    // 复杂数据
-    var list = [1,2,3];
-    var dict = {"name":"阳君", "qq":"937447974", "list":list};
-
-    // JS通知WKWebView
-    window.webkit.messageHandlers.share.postMessage(dict);
+function back(){
+    window.location.href = 'https://yuzouone.github.io/cvue/company2.html';
 }
 //获取设备屏幕宽度,设置根目录宽度和字体大小
     function screenwidth(){
