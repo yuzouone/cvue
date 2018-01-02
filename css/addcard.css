@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-12-16 13:34:54
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-12-16 16:38:58
+* @Last Modified time: 2017-12-29 16:48:00
 */
 *{
     margin: 0;padding: 0;border: 0;
@@ -79,6 +79,9 @@ html,body{
     font-size:0.3rem;
     color:red;
     margin-top: 0.2rem;
+}
+.ifshow p{
+    text-indent:0.1rem;
 }
 .next{
     font-size:0.6rem;

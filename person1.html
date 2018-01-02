@@ -5,16 +5,16 @@
     <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
     <link rel="stylesheet" href="css/person1.css">
     <link rel="stylesheet" href="css/animate.min.css">
-    <title>个人信息</title>
+    <title>开店</title>
     <script src="js/vue.js"></script>
     <script src="js/vue-resource.js"></script>
     <script src="js/jquery-3.1.1.js"></script>
 </head>
 <body>
-<div class="header">
+<!-- <div class="header">
     <p>开店</p>
     <img src="images/back@2x.png" alt="">
-</div>
+</div> -->
 <div class="center">
     <p>经营品类</p>
     <p>请选择您要经营商品的品类（可多选）</p>
@@ -51,18 +51,14 @@
 //获取登录信息
     function token(){
         var arr = [];
-        var r = window.location.search.substr(1).split('&');
-        var first = r[0].split('=')[1];
-        var second = r[1].split('=')[1];
-        arr.push(first);
-        arr.push(second);
-        return arr;
+        var r = window.location.search.substr(1);
+        var first = r.split('=')[1];
+        return first;
     }
     console.log('token');
     console.log(token());
     var tokenid = token();
-    Vue.http.headers.common['authorization'] = tokenid[0];
-    var id2 = tokenid[1];
+    Vue.http.headers.common['authorization'] = tokenid;
 //vue app2实例
     var sa = '',sb = '',sc= '',sd= '',se= '',sf= '',sg= '',sh= '',si = '';
     var vm2 = new Vue({
@@ -227,12 +223,12 @@ var vm3 = new Vue({
                        // window.location.href="company2.html"
                        //上传
                        //Vue.http.options.emulateJSON = true;
-                       vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"id": id2,"sellerType":sum}, {emulateJSON: true})
+                       vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"sellerType":sum}, {emulateJSON: true})
                         .then(function(res){
                             console.log('请求结果');
                             console.log(res);
                             if(res.body&&res.body.code&&res.body.code == '200'){
-                                window.location.href = 'https://yuzouone.github.io/cvue/person2.html?'+"token="+tokenid[0]+"&"+"id="+tokenid[1];
+                                window.location.href = 'http://dev.wetripay.com:8000/eShop/api/page/person2.html?'+"token="+tokenid;
                             }
                        });
                 }else{

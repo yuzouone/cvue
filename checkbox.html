@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
     <link rel="stylesheet" href="css/checkbox.css">
-    <title>公司信息</title>
+    <link rel="stylesheet" href="css/animate.min.css">
+    <title id="title">公司信息</title>
     <script src="js/vue.js"></script>
     <script src="js/vue-resource.js"></script>
 </head>
 <body>
 <div class="main" id="app">
-    <div class="header">
+    <!-- <div class="header">
         <p>{{name}}</p>
-        <img src="images/back@2x.png" alt="" ontouchend="back()">
-    </div>
+        <img src="images/back@2x.png" alt="" >
+    </div> -->
     <div class="nav">
         <img src="images/banner@2x.png" alt="">
     </div>
@@ -55,6 +56,11 @@
             </div>
         </div>
     </div>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="ifhid" v-if="ifhid">
+            <p >请选择租借货柜的位置</p>
+        </div>
+    </transition>
     <div class="gray"></div>
     <div class="success">
         <p>您已选择货柜</p>
@@ -108,8 +114,6 @@
         arr.push(second);
         return arr;
     }
-    console.log('token');
-    console.log(token());
     var tokenid = token();
     Vue.http.headers.common['authorization'] = tokenid[0];
     var id2 = tokenid[1];
@@ -119,9 +123,15 @@
         console.log('成功');
         console.log(data);
         var cells = data.body.data.cells;
+        var mycells = data.body.data.mycells;
         var heng = Number(data.body.data.shelf.length);
         var shu = Number(data.body.data.shelf.width);
         var boxname = data.body.data.shelf.name;
+        //title
+        var title = document.getElementById('title');
+        title.innerHTML = boxname;
+        console.log('头部名字');
+        console.log(title);
         //头部格子数组
         var toparr = [];
         for(var i=0;i<=shu;i++){
@@ -168,6 +178,7 @@
                 bluearr:'',
                 boxnum:0,
                 price:0,
+                ifhid:false,
             },
             methods:{
                 next:function(){
@@ -180,13 +191,31 @@
                             bluebox += vm.bluearr[i]+'、'
                         }
                     }
+                    console.log(1);
                     console.log(bluebox);
-                    window.location.href = 'bluebox='+bluebox;
+                    if(bluebox){//判断是否选格子
+                        vm.ifhid = false;
+                        //判断用户移动端使用的系统平台
+                        var u = navigator.userAgent;
+                        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+                            //安卓手机
+                            console.log('安卓手机');
+                            window.location.href = 'bluebox='+bluebox;
+                        } else if (u.indexOf('iPhone') > -1) {
+                            //苹果手机
+                            console.log('苹果手机');
+                            window.webkit.messageHandlers.share.postMessage({'bluebox':bluebox});
+                        } else if (u.indexOf('Windows Phone') > -1) {
+                            //winphone手机
+                        }
+                    }else{
+                        vm.ifhid = true;
+                    }
                 }
             },
             computed:{
                 cost:function(){
-                    /*vm.price = this.boxnum*365;*/
+
                     return this.boxnum*365;
                 }
             }
@@ -204,6 +233,21 @@
                 colorbox.style.background = '#b5b5b5';
             }
 
+        }
+        //格子颜色黄
+        for(var i = 0;i<mycells.length;i++){
+            var shu3 = mycells[i].obscissa-1;
+            var heng3 = mycells[i].ordinate.toUpperCase().charCodeAt(0)-65;
+            shu3 = Number(shu3);
+            heng3 = Number(heng3);
+            var state2 = mycells[i].state;
+            itemsarr[shu3].splice(heng3,1,state2);
+            var colorbox2 = document.getElementsByClassName('shu')[shu3].children[heng3];
+            if(state2 == '0'){
+                colorbox2.style.background = '#ffe200';
+            }else if(state2 == '1'){
+                colorbox2.style.background = '#b5b5b5';
+            }
         }
         //格子添加事件
         for(var i=0;i<shu;i++){
