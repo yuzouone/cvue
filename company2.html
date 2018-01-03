@@ -24,7 +24,7 @@
     <div class="face" >
         <img src="images/card_camera_normal_14@2x.png" alt="" class="camara">
         <p>法人手持身份证正面照</p>
-        <input type="file"  v-on:change="getphoto" accept="image/*"  >
+        <input type="file"  v-on:change="getphoto" accept="image/*" v-on:touchend="getandiod" >
         <img src="" alt="" class="card1" id="img">
     </div>
     <div class="opsize">
@@ -147,6 +147,25 @@ var vm = new Vue({
         }else{
             this.ifhid = true;
         }
+    },
+    getandiod:function(){
+        //判断用户移动端使用的系统平台
+        var u = navigator.userAgent;
+        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+            //安卓手机
+            console.log('安卓手机');
+            window.jsObj.goAppCamera();
+            window.cameraResult = function(data){
+                document.getElementById('img').src = data;
+            }
+        } else if (u.indexOf('iPhone') > -1) {
+            //苹果手机
+            console.log('苹果手机');
+
+        } else if (u.indexOf('Windows Phone') > -1) {
+            //winphone手机
+        }
+
     }
 
 

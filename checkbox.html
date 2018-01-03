@@ -127,6 +127,8 @@
         var heng = Number(data.body.data.shelf.length);
         var shu = Number(data.body.data.shelf.width);
         var boxname = data.body.data.shelf.name;
+        var boxid = data.body.data.shelf.id;
+        var year = 1;
         //title
         var title = document.getElementById('title');
         title.innerHTML = boxname;
@@ -157,6 +159,8 @@
             itemsarr.push(obj);
         }
         //数组状态化
+        console.log('数组状态化');
+        console.log(itemsarr);
         for(var i = 0;i<cells.length;i++){
             var shu2 = cells[i].obscissa-1;
             var heng2 = cells[i].ordinate.toUpperCase().charCodeAt(0)-65;
@@ -200,11 +204,13 @@
                         if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
                             //安卓手机
                             console.log('安卓手机');
-                            window.location.href = 'bluebox='+bluebox;
+                            console.log('bluebox='+bluebox+'&id='+boxid+'&cost='+vm.cost+'&year='+year);
+                            window.location.href = 'bluebox='+bluebox+'&id='+boxid+'&cost='+vm.cost+'&year='+year;
                         } else if (u.indexOf('iPhone') > -1) {
                             //苹果手机
                             console.log('苹果手机');
-                            window.webkit.messageHandlers.share.postMessage({'bluebox':bluebox});
+                            console.log({'bluebox':bluebox,'id':boxid,'cost':vm.cost,'year':year});
+                            window.webkit.messageHandlers.share.postMessage({'bluebox':bluebox,'id':boxid,'cost':vm.cost,'year':year});
                         } else if (u.indexOf('Windows Phone') > -1) {
                             //winphone手机
                         }
@@ -216,7 +222,7 @@
             computed:{
                 cost:function(){
 
-                    return this.boxnum*365;
+                    return this.boxnum*365*year;
                 }
             }
         });

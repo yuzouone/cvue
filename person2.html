@@ -65,9 +65,9 @@
                     vm.ifhid = false;
                     //上传
                     vm.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"idCardNumber": this.personcard,"name": this.name},{emulateJSON: true})
-                        .then(function(respond){
+                        .then(function(res){
                             console.log('上传成功');
-                            console.log(respond);
+                            console.log(res);
                             if(res.body&&res.body.code&&res.body.code == '200'){
                                 window.location.href = 'http://dev.wetripay.com:8000/eShop/api/page/person3.html?'+"token="+tokenid;
                             }
