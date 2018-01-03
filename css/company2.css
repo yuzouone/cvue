@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-12-04 15:07:53
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-12-18 17:49:36
+* @Last Modified time: 2018-01-03 15:36:57
 */
 *{
     margin: 0;padding: 0;border: 0;
@@ -168,6 +168,10 @@ html,body{
     font-size:0.6rem;
     margin-top: 0.5rem;
     color:#ffa800;
+    transition: all ease 1s;
+    -moz-transition: all ease 1s; /* Firefox 4 */
+    -webkit-transition: all ease1s; /* Safari 和 Chrome */
+    -o-transition: all ease 1s; /* Opera */
 }
 .ifhid{
     font-size:0.3rem;

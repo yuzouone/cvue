@@ -90,7 +90,7 @@
             </div>
         </div>
     </div>
-    <div class="next" v-on:touchend="next">
+    <div class="next" id="next" v-on:touchend="next" v-on:touchstart="starnext">
         <p>立即签约</p>
     </div>
 </div>
@@ -185,7 +185,19 @@
                 ifhid:false,
             },
             methods:{
+                starnext:function(){
+                    var next = document.getElementById('next');
+                    next.style.color='green';
+                    next.style.fontSize='0.8rem';
+                },
                 next:function(){
+                    //定时
+                    setTimeout(function(){
+                        var next = document.getElementById('next');
+                        next.style.color='#ffa800';
+                        next.style.fontSize='0.6rem';
+                    }, 500)
+                    //格子数组
                     console.log(vm.bluearr);
                     var bluebox = '';
                     for(var i=0;i<vm.bluearr.length;i++){
@@ -204,13 +216,14 @@
                         if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
                             //安卓手机
                             console.log('安卓手机');
-                            console.log('bluebox='+bluebox+'&id='+boxid+'&cost='+vm.cost+'&year='+year);
-                            window.location.href = 'bluebox='+bluebox+'&id='+boxid+'&cost='+vm.cost+'&year='+year;
+                            console.log('bluebox='+bluebox+'&id='+boxid+'&cost='+vm.cost+'&year='+year+'&boxnum'+vm.boxnum);
+                            window.location.href = 'bluebox='+bluebox+'&id='+boxid+'&cost='+vm.cost+'&year='+year+'&boxnum'+vm.boxnum;
+
                         } else if (u.indexOf('iPhone') > -1) {
                             //苹果手机
                             console.log('苹果手机');
                             console.log({'bluebox':bluebox,'id':boxid,'cost':vm.cost,'year':year});
-                            window.webkit.messageHandlers.share.postMessage({'bluebox':bluebox,'id':boxid,'cost':vm.cost,'year':year});
+                            window.webkit.messageHandlers.share.postMessage({'bluebox':bluebox,'id':boxid,'cost':vm.cost,'year':year,'boxnum':vm.boxnum});
                         } else if (u.indexOf('Windows Phone') > -1) {
                             //winphone手机
                         }
@@ -221,7 +234,6 @@
             },
             computed:{
                 cost:function(){
-
                     return this.boxnum*365*year;
                 }
             }

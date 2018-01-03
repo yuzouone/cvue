@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-12-11 15:11:42
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-12-29 16:14:57
+* @Last Modified time: 2018-01-03 15:44:33
 */
 *{
     margin: 0;padding: 0;border: 0;
@@ -312,4 +312,8 @@ html,body{
     font-size:0.32rem;
     color:#222222;
     margin-top: 0.1rem;
+    transition: all ease 1s;
+    -moz-transition: all ease 1s; /* Firefox 4 */
+    -webkit-transition: all ease1s; /* Safari 和 Chrome */
+    -o-transition: all ease 1s; /* Opera */
 }

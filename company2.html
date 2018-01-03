@@ -30,7 +30,7 @@
     <div class="opsize">
         <img src="images/card_camera_normal_14@2x.png" alt="" class="camara2">
         <p>法人手持身份证反面照</p>
-        <input type="file"  v-on:change="getphoto2" accept="image/*"  >
+        <input type="file"  v-on:change="getphoto2" accept="image/*" v-on:touchend="getandiod2" >
         <img src="" alt="" class="card2" id="img2">
     </div>
     <input type="text" placeholder="输入您的姓名" class="firstinput" v-model="name">
@@ -41,7 +41,7 @@
         </div>
     </transition>
 
-    <p class="next" v-on:touchend="next">下一步</p>
+    <p class="next" id="next" v-on:touchend="next" v-on:touchstart="starnext">下一步</p>
 </div>
 <script>
 //获取设备屏幕宽度,设置根目录宽度和字体大小
@@ -122,7 +122,17 @@ var vm = new Vue({
         //s.readAsArrayBuffer(file);readAsArrayBuffer
 
     },
+    starnext:function(){
+        var next = document.getElementById('next');
+        next.style.color='green';
+        next.style.fontSize='0.8rem';
+    },
     next:function(){
+        setTimeout(function(){
+            var next = document.getElementById('next');
+            next.style.color='#ffa800';
+            next.style.fontSize='0.6rem';
+        }, 500)
         console.log(1);
         console.log(this.photo1);
         console.log(this.photo2);
@@ -147,6 +157,8 @@ var vm = new Vue({
         }else{
             this.ifhid = true;
         }
+
+
     },
     getandiod:function(){
         //判断用户移动端使用的系统平台
@@ -157,6 +169,27 @@ var vm = new Vue({
             window.jsObj.goAppCamera();
             window.cameraResult = function(data){
                 document.getElementById('img').src = data;
+                vm.photo1=data;
+            }
+        } else if (u.indexOf('iPhone') > -1) {
+            //苹果手机
+            console.log('苹果手机');
+
+        } else if (u.indexOf('Windows Phone') > -1) {
+            //winphone手机
+        }
+
+    },
+    getandiod2:function(){
+        //判断用户移动端使用的系统平台
+        var u = navigator.userAgent;
+        if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+            //安卓手机
+            console.log('安卓手机');
+            window.jsObj.goAppCamera();
+            window.cameraResult = function(data){
+                document.getElementById('img2').src = data;
+                vm.photo2=data;
             }
         } else if (u.indexOf('iPhone') > -1) {
             //苹果手机
