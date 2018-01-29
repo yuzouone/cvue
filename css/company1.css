@@ -2,7 +2,7 @@
 * @Author: Administrator
 * @Date:   2017-12-02 14:31:05
 * @Last Modified by:   Administrator
-* @Last Modified time: 2017-12-27 11:48:42
+* @Last Modified time: 2018-01-17 14:11:49
 */
 *{
     padding: 0;border: 0;margin: 0;
@@ -31,7 +31,7 @@ html,body{
 .header img{
     position:absolute;
     width:0.5rem;
-    height；0.5rem;
+    height:0.5rem;
     top:0;
     left:0.24rem;
 
@@ -101,7 +101,7 @@ html,body{
 .next{
     margin-top: 0.86rem;
     font-size:0.6rem;
-    color:#ffa800
+    color:#159bff
 
 
 }
@@ -109,4 +109,33 @@ html,body{
 .addcolor{
     background:#444444 !important;
     color:white;
+}
+
+/* 模态框 */
+.motai{
+    width:5rem;
+    height:3rem;
+    background:white;
+    font-size:0.32rem;
+    text-align: center;
+    position:absolute;
+    left:50%;
+    top:40%;
+    transform: translateX(-2.5rem);
+    border-radius: 0.2rem;
+    border:1px solid #ccc;
+    display:-webkit-flex;
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    z-index:88;
+
+}
+.motai_p1{
+    margin-top: 1rem;
+}
+.motai_p2{
+    margin-top: 0.8rem;
+    margin-left: 2.8rem;
+    color:#ffa800;
 }

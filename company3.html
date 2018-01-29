@@ -8,6 +8,7 @@
     <title>开店</title>
     <script src="js/vue.js"></script>
     <script src="js/vue-resource.js"></script>
+    <script src="js/My97DatePicker/WdatePicker.js"></script>
 </head>
 <body>
 <!-- <div class="header">
@@ -24,7 +25,8 @@
     <div class="face" id="app">
         <img src="images/card_camera_normal_14@2x.png" alt="" class="camara">
         <p>营业执照</p>
-        <input type="file"  v-on:change="getphoto" accept="image/*"  >
+        <!-- <input type="file"  v-on:change="getphoto" accept="image/*" v-on:touchend="getandiod" > -->
+        <div class="face_hide" v-on:touchend="getandiod"></div>
         <img src="" alt="" id="img" class="card1">
     </div>
 </div>
@@ -48,25 +50,54 @@
     <div class="b2">
         <p>执照有效期</p>
         <div class="b2_right" id="example-4" >
-            <input type="radio" id="one" class="one" name="activity" value="longtime" v-model="picked1" v-on:touchend="long" >
-            <label for="one" class="one_label">长期有效</label>
-            <input type="radio" id="two" class="two" name="activity" value="shorttime"  v-model="picked1" v-on:touchend="short" >
-            <label for="two" class="two_label">固定有效期</label>
+            <div class="b2_right1">
+                <input type="radio" id="one" class="one" v-model="picked1" value="true">
+                <label for="one" class="one_label" >长期有效</label>
+            </div>
+            <div class="b2_right1">
+                <!-- <input type="radio" id="two" class="two" name="activity"  > -->
+                <input type="radio" id="two" class="two" v-model="picked1" value="false">
+                <label for="two" class="two_label">固定有效期</label>
+            </div>
         </div>
     </div>
     <div class="b1">
         <p>有效期</p>
-        <input type="text" placeholder="请输入日期" v-model="date" id="long">
+        <input type="text" placeholder="请输入日期" value=''  id="long" readonly="true" onclick="WdatePicker()"  >
     </div>
     <transition name="custorm" enter-active-class="animated tada" leave-active-class="animated bounceOutRight">
         <div class="ifhid" v-if="ifhid">
             <p>请填入完整的信息</p>
         </div>
     </transition>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="motai" v-if="ifmotai2" >
+            <p class="motai_p1">服务器异常，请重新登录</p>
+            <p class="motai_p2" v-on:touchstart = "fnmotai">确定</p>
+        </div>
+    </transition>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="motai" v-if="ifmotai3" >
+            <p class="motai_p1">登录态异常，请重新登录</p>
+            <p class="motai_p2" v-on:touchend = "fnmotai">确定</p>
+        </div>
+    </transition>
+    <div class="loader" v-if="ifmotai">
+      <div class="dot">努</div>
+      <div class="dot">力</div>
+      <div class="dot">上</div>
+      <div class="dot">传</div>
+      <div class="dot">中</div>
+    </div>
 
 </div>
 <p class="next" id="app3" v-on:touchend="next">提交</p>
 <script>
+function sendKey3(user_id){
+        vm.photo1=user_id;
+        var img = document.getElementById('img');
+        img.src = user_id;
+}
 //获取设备屏幕宽度,设置根目录宽度和字体大小
     function screenwidth(){
         var html = document.getElementById('html');
@@ -91,31 +122,43 @@
         el:"#app",
         data:{
             photo1:''
-
         },
         methods:{
             getphoto:function(event){
                 console.log(event);
-                var file = event.target.files[0];
+                /*var file = event.target.files[0];
                 var s = new FileReader();
                 console.log("reader对象");
                 console.log(s);
                 s.onloadend = function(e){
                     console.log('读取结果');
                     console.log(e);
-                    console.log(e.target.result);
                     vm.photo1 = e.target.result;
                     var img = document.getElementById('img');
                     img.src = vm.photo1;
-                    /*//上传
-                    vm.$http.post('http://dev.wetripay.com:8000/eShop/api/upload',{'phone':'13602402344','type':'idCardOne','file':e.target.result},{emulateJSON: true})
-                        .then(function(respond){
-                            console.log('上传成功');
-                            console.log(respond);
-                        })*/
-
                 }
-                s.readAsDataURL(file);
+                s.readAsDataURL(file);*/
+            },
+            getandiod:function(){
+                //判断用户移动端使用的系统平台
+                var u = navigator.userAgent;
+                if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+                    //安卓手机
+                    console.log('安卓手机');
+                    window.jsObj.goAppCamera();
+                    window.cameraResult = function(data){
+                        document.getElementById('img').src = data;
+                        vm.photo1=data;
+                    }
+                } else if (u.indexOf('iPhone') > -1) {
+                    //苹果手机
+                    console.log('苹果手机');
+                    window.webkit.messageHandlers.openAlbum.postMessage({'a':'3'});
+
+                } else if (u.indexOf('Windows Phone') > -1) {
+                    //winphone手机
+                }
+
             },
         }
     });
@@ -128,18 +171,45 @@
             zid:'',
             zlocation:"",
             picked1:"",
-            /*picked2:"",*/
             date:'',
-            ifhid:false
+            ifhid:false,
+            ifmotai:false,
+            ifmotai2:false,
+            ifmotai3:false,
+            iflong:false,
+            test:""
 
         },
         methods:{
             long:function(){
-                console.log(8888888888888);
+               /* console.log(8888888888888);
                 document.getElementById('long').disabled='disabled';
+                document.getElementById('long').value='不用输入信息';
+                vm2.iflong=true;*/
+
             },
             short:function(){
-                document.getElementById('long').disabled='';
+               /* document.getElementById('long').disabled='';
+                document.getElementById('long').value='';
+                vm2.iflong=false;*/
+            },
+            fnmotai:function(){
+                this.ifmotai2 = false;
+                this.ifmotai3 = false;
+            }
+        },
+        watch:{
+            picked1:function(){
+                    var fruit = document.getElementById('long');
+                    if(vm2.picked1=="true"){
+                        fruit.disabled='disabled';
+                        fruit.value ='不用输入信息';//将值传到对象的value中
+                        vm2.data='长期有效';
+                    }else{
+                        fruit.disabled='';
+                        fruit.value ='请输入日期';
+                        vm2.data='短期有效';
+                    }
             }
         }
     });
@@ -148,27 +218,44 @@
         el:"#app3",
         methods:{
             next:function(){
-                if(vm.photo1!=""&&vm2.zname!=""&&vm2.fname!=""&&vm2.zid!=""&&vm2.zlocation!=""&&vm2.picked1!=""){
+                var mydata="";
+                if(vm2.data == '长期有效'){
+                    mydata='长期有效';
+                }else if(vm2.data=='短期有效'){
+                    mydata = document.getElementById('long').value;
+                }
+                console.log(123);
+                console.log(mydata);
+                if(vm.photo1!=""&&vm2.zname!=""&&vm2.fname!=""&&vm2.zid!=""&&vm2.zlocation!=""&&mydata!=''){
                     console.log('成功');
                     vm2.ifhid = false;
+                    vm2.ifmotai = true;
                     //上传
-                    vm.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?uploadLicense',{"image":vm.photo1,'representor':vm2.fname,"scope":vm.zlocation,"vailabletime": vm2.date,"name":vm2.zname,'registernumber':vm2.zid,},{emulateJSON: true})
+                    vm.$http.post('http://dev.wetripay.com:8001/c1st/api/seller?uploadLicense',{"image":vm.photo1,'representor':vm2.fname,"scope":vm2.zlocation,"vailabletime": mydata,"name":vm2.zname,'registernumber':vm2.zid,},{emulateJSON: true})
                         .then(function(res){
                             console.log('上传成功');
                             console.log(res);
-                                if(res.body&&res.body.code&&res.body.code == '200'){
-                                    window.location.href = 'http://dev.wetripay.com:8000/eShop/api/page/addcard.html?'+"token="+tokenid;
-                                }
+                            if(res.body&&res.body.success == true){
+                                vm2.ifmotai = false;
+                                window.location.href = 'http://dev.wetripay.com:8001/c1st/api/page/addcard.html?'+"token="+tokenid;
+                            }
+                            else if(res.body&&res.body.success==false){
+                                console.log('登录过期');
+                                vm2.ifmotai3 = true;
+                                vm2.ifmotai = false;
+                            }
+                        },function(error){
+                            console.log('服务器异常，请重新登录');
+                            vm2.ifmotai2 = true;
+                            if(vm2.ifmotai2){
+                                vm2.ifmotai = false;
+                            }
                         })
                 }else{
                     console.log('失败');
-                    console.log(vm2.picked1);
-                    console.log(vm2.date);
                     vm2.ifhid = true;
-
                 }
             }
-
         },
 
     });

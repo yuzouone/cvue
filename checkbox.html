@@ -5,9 +5,10 @@
     <meta name="viewport" content="width:device-width,initial-scale=1, maximum-scale=1,minimum-scale=0.5">
     <link rel="stylesheet" href="css/checkbox.css">
     <link rel="stylesheet" href="css/animate.min.css">
-    <title id="title">公司信息</title>
+    <title id="title"></title>
     <script src="js/vue.js"></script>
     <script src="js/vue-resource.js"></script>
+    <script src="js/touch.min.js"></script>
 </head>
 <body>
 <div class="main" id="app">
@@ -30,7 +31,7 @@
         <div class="tree">
             <div class="graychange">
                 <div class="graybox"></div>
-                <p>不可选择</p>
+                <p id="target">不可选择</p>
             </div>
             <div class="yellowchange">
                 <div class="yellowbox"></div>
@@ -38,12 +39,12 @@
             </div>
             <div class="bluechange">
                 <div class="bluebox"></div>
-                <p>我已租借</p>
+                <p>已选择</p>
             </div>
         </div>
     </div>
     <div class="gray"></div>
-    <div class="content">
+    <div class="content" >
         <div class="content_top">
             <div class="top" v-for="item in tarr"><p>{{item}}</p></div>
         </div>
@@ -90,9 +91,25 @@
             </div>
         </div>
     </div>
-    <div class="next" id="next" v-on:touchend="next" v-on:touchstart="starnext">
+    <!-- <div class="next" id="next" v-on:touchend="next" v-on:touchstart="starnext">
         <p>立即签约</p>
-    </div>
+    </div> -->
+    <input type="button" class="next" id="next" v-on:touchend="next" v-on:touchstart="starnext" value="立即签约">
+
+</div>
+<div id = "app2">
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="motai" v-if="ifmotai2" >
+            <p class="motai_p1">服务器异常，请重新登录</p>
+            <p class="motai_p2" v-on:touchend = "fnmotai">确定</p>
+        </div>
+    </transition>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="motai" v-if="ifmotai3" >
+            <p class="motai_p1">登录态异常，请重新登录</p>
+            <p class="motai_p2" v-on:touchend = "fnmotai">确定</p>
+        </div>
+    </transition>
 </div>
 </body>
 <script>
@@ -104,6 +121,44 @@
         html.style.fontSize = w/7.5 +'px';
     }
     screenwidth();
+//双手指缩放事件
+var target = document.getElementById("target");
+target.style.webkitTransition = 'all ease 0.05s';
+touch.on('#target', 'touchstart', function(ev){
+    ev.preventDefault();
+});
+var initialScale = 1;
+var currentScale;
+touch.on('#target', 'pinchend', function(ev){
+    console.log(ev);
+    currentScale = ev.scale - 1;
+    currentScale = initialScale + currentScale;
+    currentScale = currentScale > 2 ? 2 : currentScale;
+    currentScale = currentScale < 1 ? 1 : currentScale;
+    this.style.webkitTransform = 'scale(' + currentScale + ')';
+    log("当前缩放比例为:" + currentScale + ".");
+});
+touch.on('#target', 'pinchend', function(ev){
+    console.log(ev);
+    console.log(123);
+    initialScale = currentScale;
+});
+//end 双手指缩放事件
+
+//vue实例app2
+    var vm2 = new Vue({
+        el:"#app2",
+        data:{
+            ifmotai2:false,
+            ifmotai3:false,
+        },
+        methods:{
+            fnmotai:function(){
+                this.ifmotai2 = false;
+                this.ifmotai3 = false;
+            }
+        }
+    });
 //获取登录信息
     function token(){
         var arr = [];
@@ -119,9 +174,16 @@
     var id2 = tokenid[1];
     var itemsarr = [];
     /*Vue.http.headers.common['authorization'] = '92b87574-309f-407d-8b22-3198393b0e61';*/
-    Vue.http.post('http://dev.wetripay.com:8000/eShop/api/shelf/chooseType',{id:id2},{emulateJSON: true}).then(function(data){
+    Vue.http.post('http://dev.wetripay.com:8001/c1st/api/shelf/chooseType',{id:id2},{emulateJSON: true}).then(function(data){
         console.log('成功');
         console.log(data);
+        if(data.body&&data.body.success == true){
+            vm2.ifmotai = false;
+        }
+        else if(data.body&&data.body.success==false){
+            console.log('登录过期');
+            vm2.ifmotai3 = true;
+        }
         var cells = data.body.data.cells;
         var mycells = data.body.data.mycells;
         var heng = Number(data.body.data.shelf.length);
@@ -183,20 +245,28 @@
                 boxnum:0,
                 price:0,
                 ifhid:false,
+                flag:true,
             },
             methods:{
                 starnext:function(){
                     var next = document.getElementById('next');
                     next.style.color='green';
-                    next.style.fontSize='0.8rem';
+                    next.style.fontSize='0.5rem';
+                    next.style.backgroundColor="#ccc";
                 },
                 next:function(){
+                    console.log(1243432);
                     //定时
                     setTimeout(function(){
                         var next = document.getElementById('next');
-                        next.style.color='#ffa800';
-                        next.style.fontSize='0.6rem';
-                    }, 500)
+                        next.style.color='#222222';
+                        next.style.fontSize='0.32rem';
+                        next.style.backgroundColor="#ffe200";
+                    }, 500);
+                    //定时
+                    var mynext = document.getElementById('next');
+                    console.log(mynext);
+                    mynext.disabled= 'disabled';
                     //格子数组
                     console.log(vm.bluearr);
                     var bluebox = '';
@@ -217,7 +287,7 @@
                             //安卓手机
                             console.log('安卓手机');
                             console.log('bluebox='+bluebox+'&id='+boxid+'&cost='+vm.cost+'&year='+year+'&boxnum'+vm.boxnum);
-                            window.location.href = 'bluebox='+bluebox+'&id='+boxid+'&cost='+vm.cost+'&year='+year+'&boxnum'+vm.boxnum;
+                            window.location.href = 'bluebox='+bluebox+'&id='+boxid+'&cost='+vm.cost+'&year='+year+'&boxnum='+vm.boxnum;
 
                         } else if (u.indexOf('iPhone') > -1) {
                             //苹果手机
@@ -230,7 +300,8 @@
                     }else{
                         vm.ifhid = true;
                     }
-                }
+                },
+
             },
             computed:{
                 cost:function(){
@@ -315,6 +386,11 @@
                 }
             }
         }
+
+
+    },function(error){
+        console.log('服务器异常，请重新登录');
+        vm2.ifmotai2 = true;
 
 
     })

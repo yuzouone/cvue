@@ -28,6 +28,23 @@
             <p >请填写所有的信息</p>
         </div>
     </transition>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="ifhid" v-if="ifhid2">
+            <p>身份证号码有误，请重填</p>
+        </div>
+    </transition>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="motai" v-if="ifmotai2" >
+            <p class="motai_p1">服务器异常，请重新登录</p>
+            <p class="motai_p2" v-on:touchend = "fnmotai">确定</p>
+        </div>
+    </transition>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="motai" v-if="ifmotai3" >
+            <p class="motai_p1">登录态异常，请重新登录</p>
+            <p class="motai_p2" v-on:touchend = "fnmotai">确定</p>
+        </div>
+    </transition>
     <p class="next" v-on:touchend ="next">下一步</p>
 </div>
 
@@ -40,6 +57,16 @@
         html.style.fontSize = w/7.5 +'px';
     }
     screenwidth();
+    //判断身份证正确
+    function isCardNo(card){
+       // 身份证号码为15位或者18位，15位时全为数字，18位前17位为数字，最后一位是校验位，可能为数字或字符X
+       var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
+       if(reg.test(card) === false){
+           return  false;
+       }else{
+            return true;
+       }
+    }
     //获取登录信息
     function token(){
         var arr = [];
@@ -56,26 +83,45 @@
         el:'#app',
         data:{
             ifhid:false,
+            ifhid2:false,
             name:'',
-            personcard:''
+            personcard:'',
+            ifmotai2:false,
+            ifmotai3:false,
         },
         methods:{
             next:function(){
                 if(vm.name!=''&&vm.personcard!=''){
                     vm.ifhid = false;
-                    //上传
-                    vm.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"idCardNumber": this.personcard,"name": this.name},{emulateJSON: true})
-                        .then(function(res){
-                            console.log('上传成功');
-                            console.log(res);
-                            if(res.body&&res.body.code&&res.body.code == '200'){
-                                window.location.href = 'http://dev.wetripay.com:8000/eShop/api/page/person3.html?'+"token="+tokenid;
-                            }
-                        })
+                    if(!isCardNo(this.personcard)){//身份证错误
+                        this.ifhid2 = true;
+                    }else{
+                        this.ifhid2 = false;
+                        //上传
+                        vm.$http.post('http://dev.wetripay.com:8001/c1st/api/seller?updateSeller',{"idCardNumber": this.personcard,"name": this.name},{emulateJSON: true})
+                            .then(function(res){
+                                console.log('上传成功');
+                                console.log(res);
+                                if(res.body&&res.body.success == true){
+                                    window.location.href = 'http://dev.wetripay.com:8001/c1st/api/page/person3.html?'+"token="+tokenid;
+                                }
+                                else if(res.body&&res.body.success==false){
+                                    console.log('登录过期');
+                                    vm.ifmotai3 = true;
+                                }
+                            },function(error){
+                                console.log('服务器异常，请重新登录');
+                                vm.ifmotai2 = true;
+                            })
+                    }
                 }else{
                     vm.ifhid = true;
                 }
 
+            },
+            fnmotai:function(){
+                this.ifmotai2 = false;
+                this.ifmotai3 = false;
             }
 
         }

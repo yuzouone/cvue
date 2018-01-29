@@ -24,23 +24,54 @@
     <div class="face" >
         <img src="images/card_camera_normal_14@2x.png" alt="" class="camara">
         <p>法人手持身份证正面照</p>
-        <input type="file"  v-on:change="getphoto" accept="image/*"  >
+        <!-- <input type="file"  v-on:change="getphoto" accept="image/*" v-on:touchend="getandiod" > -->
+        <div class="face_hide" v-on:touchend="getandiod"></div>
         <img src="" alt="" class="card1" id="img">
     </div>
     <div class="opsize">
         <img src="images/card_camera_normal_14@2x.png" alt="" class="camara2">
         <p>法人手持身份证反面照</p>
-        <input type="file"  v-on:change="getphoto2" accept="image/*"  >
+        <!-- <input type="file"  v-on:change="getphoto2" accept="image/*" v-on:touchend="getandiod2" > -->
+        <div class="opsize_hide" v-on:touchend="getandiod2"></div>
         <img src="" alt="" class="card2" id="img2">
+    </div>
+    <div class="loader" v-if="ifmotai">
+      <div class="dot">努</div>
+      <div class="dot">力</div>
+      <div class="dot">上</div>
+      <div class="dot">传</div>
+      <div class="dot">中</div>
     </div>
     <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
         <div class="ifhid" v-if="ifhid">
             <p>请填入完整的信息</p>
         </div>
     </transition>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="motai" v-if="ifmotai2" >
+            <p class="motai_p1">服务器异常，请重新登录</p>
+            <p class="motai_p2" v-on:touchend = "fnmotai">确定</p>
+        </div>
+    </transition>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="motai" v-if="ifmotai3" >
+            <p class="motai_p1">登录态异常，请重新登录</p>
+            <p class="motai_p2" v-on:touchend = "fnmotai">确定</p>
+        </div>
+    </transition>
     <p class="next" v-on:touchend="next">提交</p>
 </div>
 <script>
+function sendKey(user_id){
+        vm.photo1=user_id;
+        var img = document.getElementById('img');
+        img.src = user_id;
+}
+function sendKey2(user_id){
+        vm.photo2=user_id;
+        var img = document.getElementById('img2');
+        img.src = user_id;
+}
 //获取设备屏幕宽度,设置根目录宽度和字体大小
     function screenwidth(){
         var html = document.getElementById('html');
@@ -67,73 +98,115 @@
         message:'',
         photo1:'',
         photo2:'',
-        ifhid:false
+        ifhid:false,
+        ifmotai:false,
+        ifmotai2:false,
+        ifmotai3:false,
       },
       methods:{
         getphoto:function(event){
             console.log(event);
-            var file = event.target.files[0];
+            /*var file = event.target.files[0];
             var s = new FileReader();
             s.onloadend = function(e){
 
                 vm.photo1 = e.target.result;
                 var img = document.getElementById('img');
                 img.src = vm.photo1;
-                /*//上传
-                vm.$http.post('http://dev.wetripay.com:8000/eShop/api/upload',{'phone':'13602402344','type':'idCardOne','file':e.target.result},{emulateJSON: true})
-                    .then(function(respond){
-                        console.log('上传成功');
-                        console.log(respond);
-                    })*/
-
             }
-            s.readAsDataURL(file);
+            s.readAsDataURL(file);*/
             //s.readAsArrayBuffer(file);readAsArrayBuffer
 
         },
         getphoto2:function(event){
-            var file = event.target.files[0];
+            /*var file = event.target.files[0];
             var s = new FileReader();
             s.onloadend = function(e){
                 var img = document.getElementById('img2');
                 vm.photo2 = e.target.result;
                 img.src = vm.photo2;
                 console.log('读取结果');
-                console.log(vm.photo2);
-                /*//上传
-                vm.$http.post('http://dev.wetripay.com:8000/eShop/api/upload',{'phone':'13602402344','type':'idCardOne','file':e.target.result},{emulateJSON: true})
-                    .then(function(respond){
-                        console.log('上传成功');
-                        console.log(respond);
-                    })*/
-
             }
-            s.readAsDataURL(file);
+            s.readAsDataURL(file);*/
             //s.readAsArrayBuffer(file);readAsArrayBuffer
 
         },
         next:function(){
-            console.log(1);
-            console.log(this.photo1);
-            console.log(this.photo2);
-            console.log(this.name);
-            console.log(this.personcard);
-            console.log(this.photo1!=''&&this.photo2!='');
             if(this.photo1!=''&&this.photo2!=''){
                 this.ifhid = false;
+                vm.ifmotai = true;
                 //上传
-                vm.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{'idCardOne':this.photo1,"idCardSecond":this.photo2,},{emulateJSON: true})
+                vm.$http.post('http://dev.wetripay.com:8001/c1st/api/seller?updateSeller',{'idCardOne':this.photo1,"idCardSecond":this.photo2,},{emulateJSON: true})
                     .then(function(res){
                         console.log('上传成功');
                         console.log(res);
-                        if(res.body&&res.body.code&&res.body.code == '200'){
-                            window.location.href = 'http://dev.wetripay.com:8000/eShop/api/page/addcard.html?'+"token="+tokenid;
+                        if(res.body&&res.body.success == true){
+                            vm.ifmotai = false;
+                            window.location.href = 'http://dev.wetripay.com:8001/c1st/api/page/addcard.html?'+"token="+tokenid;
+                        }
+
+                        else if(res.body&&res.body.success==false){
+                            console.log('登录过期');
+                            vm.ifmotai3 = true;
+                            vm.ifmotai = false;
+                        }
+                    },function(error){
+                        console.log('服务器异常，请重新登录');
+                        vm.ifmotai2 = true;
+                        if(vm.ifmotai2){
+                            vm.ifmotai = false;
                         }
                     })
 
             }else{
                 this.ifhid = true;
             }
+        },
+        getandiod:function(){
+            //判断用户移动端使用的系统平台
+            var u = navigator.userAgent;
+            if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+                //安卓手机
+                console.log('安卓手机');
+                window.jsObj.goAppCamera();
+                window.cameraResult = function(data){
+                    document.getElementById('img').src = data;
+                    vm.photo1=data;
+                }
+            } else if (u.indexOf('iPhone') > -1) {
+                //苹果手机
+                console.log('苹果手机');
+                window.webkit.messageHandlers.openAlbum.postMessage({'a':'1'});
+
+            } else if (u.indexOf('Windows Phone') > -1) {
+                //winphone手机
+            }
+
+        },
+        getandiod2:function(){
+            //判断用户移动端使用的系统平台
+            var u = navigator.userAgent;
+            if (u.indexOf('Android') > -1 || u.indexOf('Linux') > -1) {
+                //安卓手机
+                console.log('安卓手机');
+                window.jsObj.goAppCamera();
+                window.cameraResult = function(data){
+                    document.getElementById('img2').src = data;
+                    vm.photo2=data;
+                }
+            } else if (u.indexOf('iPhone') > -1) {
+                //苹果手机
+                console.log('苹果手机');
+                window.webkit.messageHandlers.openAlbum.postMessage({'a':'2'});
+
+            } else if (u.indexOf('Windows Phone') > -1) {
+                //winphone手机
+            }
+
+        },
+        fnmotai:function(){
+            this.ifmotai2 = false;
+            this.ifmotai3 = false;
         }
 
 

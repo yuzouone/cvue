@@ -36,6 +36,18 @@
             <p >请选择商品种类</p>
         </div>
     </transition>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="motai" v-if="ifmotai2" >
+            <p class="motai_p1">服务器异常，请重新登录</p>
+            <p class="motai_p2" v-on:touchend = "fnmotai">确定</p>
+        </div>
+    </transition>
+    <transition name="custom-classes-transition" enter-active-class="animated wobble" leave-active-class="animated bounceOutRight">
+        <div class="motai" v-if="ifmotai3" >
+            <p class="motai_p1">登录态异常，请重新登录</p>
+            <p class="motai_p2" v-on:touchend = "fnmotai">确定</p>
+        </div>
+    </transition>
 </div>
 
 <p v-on:click="next()" class="next" id="app3">下一步</p>
@@ -223,14 +235,21 @@ var vm3 = new Vue({
                        // window.location.href="company2.html"
                        //上传
                        //Vue.http.options.emulateJSON = true;
-                       vm3.$http.post('http://dev.wetripay.com:8000/eShop/api/seller?updateSeller',{"sellerType":sum}, {emulateJSON: true})
+                       vm3.$http.post('http://dev.wetripay.com:8001/c1st/api/seller?updateSeller',{"productTypeId":sum,'sellerType':"个人"}, {emulateJSON: true})
                         .then(function(res){
                             console.log('请求结果');
                             console.log(res);
-                            if(res.body&&res.body.code&&res.body.code == '200'){
-                                window.location.href = 'http://dev.wetripay.com:8000/eShop/api/page/person2.html?'+"token="+tokenid;
+                            if(res.body&&res.body.success == true){
+                                window.location.href = 'http://dev.wetripay.com:8001/c1st/api/page/person2.html?'+"token="+tokenid;
                             }
-                       });
+                            else if(res.body&&res.body.success==false){
+                                console.log('登录过期');
+                                vm4.ifmotai3 = true;
+                            }
+                       },function(error){
+                            console.log('服务器异常，请重新登录');
+                            vm4.ifmotai2 = true;
+                        });
                 }else{
                     vm4.change = true;
 
@@ -253,7 +272,15 @@ var vm3 = new Vue({
     var vm4 = new Vue({
         el:'#app4',
         data:{
-            change:false
+            change:false,
+            ifmotai2:false,
+            ifmotai3:false,
+        },
+        methods:{
+            fnmotai:function(){
+                this.ifmotai2 = false;
+                this.ifmotai3 = false;
+            }
         }
 
     })
